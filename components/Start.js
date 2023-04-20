@@ -1,94 +1,109 @@
-import React, { Component } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, ImageBackground, TouchableOpacity } from 'react-native';
-import { getAuth, signInAnonymously } from "firebase/auth";
+import React from "react";
+import {
+  View,
+  Text,
+  Button,
+  TextInput,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 
-const backgroundColors = {
-  black: { backgroundColor: '#090C08' },
-  purple: { backgroundColor: '#474056' },
-  gray: { backgroundColor: '#8A95A5' },
-  green: { backgroundColor: '#B9C6AE' },
-}
+const bgColors = {
+  black: { backgroundColor: "#000000" },
+  gray: { backgroundColor: "#8a95a5" },
+  purple: { backgroundColor: "#474056" },
+  green: { backgroundColor: "#94ae89" },
+};
 
 export default class Start extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      backgroundColor: '',
-    }
+      name: "",
+      bgColor: ""
+    };
   }
+
   render() {
-    const { black, purple, gray, green } = backgroundColors;
+    const { black, gray, purple, green } = bgColors;
     return (
       <ImageBackground
-        source={require('../assets/background-image.png')}
-        style={[styles.container, styles.main]}
+        source={require("../assets/background-image.png")}
+        style={[styles.container, styles.columnEvenlyCenter]}
       >
-        <Text style={styles.title}>Chat App</Text>
+        <Text style={styles.title}>Chat Tack</Text>
 
-        <View style={[styles.box, styles.main]}>
+        <View style={[styles.nameInput__container, styles.columnEvenlyCenter]}>
           <TextInput
-            style={styles.input}
+            style={styles.nameInput__input}
             onChangeText={(name) => this.setState({ name })}
             value={this.state.name}
-            placeholder='Enter Name'
+            placeholder="Enter your Name"
           />
-          <View>
-            <Text style={styles.text}>Choose Your Background Color</Text>
-            <View style={[styles.colors, styles.colorWrapper]}>
+
+          <View style={styles.colorSelect}>
+            <Text style={styles.colorSelect__text}>
+              Choose your Background:
+            </Text>
+            <View style={styles.colorSelect__dotsWrapper}>
               <TouchableOpacity
                 style={[
-                  styles.color,
+                  styles.colorSelect__dot,
                   black,
                   this.state.color === black.backgroundColor
-                    ? styles.colorSelected
+                    ? styles.colorSelect__dotSelected
                     : {},
                 ]}
-                onPress={() => this.setState({ backgroundColor: black.backgroundColor })}
+                onPress={() => this.setState({ bgColor: black.backgroundColor })} // 
               />
+
               <TouchableOpacity
                 style={[
-                  styles.color,
-                  purple,
-                  this.state.color === purple.backgroundColor
-                    ? styles.colorSelected
-                    : {},
-                ]}
-                onPress={() => this.setState({ backgroundColor: purple.backgroundColor })}
-              />
-              <TouchableOpacity
-                style={[
-                  styles.color,
+                  styles.colorSelect__dot,
                   gray,
                   this.state.color === gray.backgroundColor
-                    ? styles.colorSelected
+                    ? styles.colorSelect__dotSelected
                     : {},
                 ]}
-                onPress={() => this.setState({ backgroundColor: gray.backgroundColor })}
+                onPress={() => this.setState({ bgColor: gray.backgroundColor })}
               />
+
               <TouchableOpacity
                 style={[
-                  styles.color,
-                  green,
-                  this.state.color === green.backgroundColor
-                    ? styles.colorSelected
+                  styles.colorSelect__dot,
+                  purple,
+                  this.state.color === purple.backgroundColor
+                    ? styles.colorSelect__dotSelected
                     : {},
                 ]}
-                onPress={() => this.setState({ backgroundColor: green.backgroundColor })}
+                onPress={() => this.setState({ bgColor: purple.backgroundColor })}
+              />
+
+              <TouchableOpacity
+                style={[
+                  styles.colorSelect__dot,
+                  green,
+                  this.state.color === green.backgroundColor
+                    ? styles.colorSelect__dotSelected
+                    : {},
+                ]}
+                onPress={() => this.setState({ bgColor: green.backgroundColor })}
               />
             </View>
           </View>
           <TouchableOpacity
-            style={styles.button}
-            title='Start Chatting'
+            style={styles.fauxButton}
             onPress={() =>
-              this.props.navigation.navigate('Chat', {
-                name: this.state.name,
-                backgroundColor: this.state.backgroundColor,
+              this.props.navigation.navigate("Chat", {
+                name: this.state.name || "no-name",
+                bgColor: this.state.bgColor || bgColors.gray.backgroundColor,
               })
             }
           >
-            <Text style={styles.buttonText}>Start Chatting</Text>
+            <Text style={[styles.colorSelect__text, styles.fauxButton__text]}>
+              Start Chatting
+            </Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -97,86 +112,80 @@ export default class Start extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  nameInput: {
-    fontSize: 16,
-    fontWeight: '300',
-    color: '#757083',
-    opacity: 50,
+  container: {
+    flex: 1,
   },
 
-  main: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+  columnEvenlyCenter: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
 
   title: {
+    color: "#fff",
     fontSize: 45,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontWeight: "600",
   },
 
-  box: {
-    backgroundColor: '#ffffff',
-    width: '88%',
-    alignItems: 'center',
-    height: '44%',
-    justifyContent: 'space-evenly',
+  nameInput__container: {
+    backgroundColor: "#fff",
+    height: "44%",
+    minHeight: 200,
+    width: "88%",
   },
 
-  input: {
+  nameInput__input: {
     height: 50,
-    width: '88%',
-    borderColor: 'gray',
-    color: '#757083',
-    borderWidth: 2,
-    borderRadius: 20,
-  },
-
-  text: {
+    width: "88%",
+    paddingLeft: 20,
+    borderColor: "gray",
+    borderWidth: 1,
+    color: "#757083",
+    opacity: 50,
     fontSize: 16,
-    fontWeight: '300',
-    color: '#757083',
-    textAlign: 'center',
+    fontWeight: "300",
   },
 
-  colors: {
-    flexDirection: 'row',
+  colorSelect: {
+    height: 75,
   },
 
-  colorWrapper: {
-    marginTop: 20,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+  colorSelect__text: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "300",
+    color: "#757083",
+    opacity: 100,
   },
 
-  color: {
-    borderRadius: 20,
+  colorSelect__dotsWrapper: {
+    flexDirection: "row",
+  },
+
+  colorSelect__dot: {
     width: 40,
     height: 40,
-    marginRight: 40,
+    borderRadius: 20,
+    margin: 10,
   },
 
-  colorSelected: {
-    borderStyle: 'solid',
+  colorSelect__dotSelected: {
+    borderStyle: "solid",
     borderWidth: 2,
-    borderColor: '#5f5f5f',
+    borderColor: "#5f5f5f",
   },
 
-  button: {
-    height: 50,
-    width: '50%',
-    backgroundColor: '#757083',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
+  fauxButton: {
+    backgroundColor: "#757083",
+    justifyContent: "center",
+    width: "88%",
+    padding: 16,
   },
 
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
+  fauxButton__text: {
+    color: "#fff",
+    fontWeight: "600",
   },
-})
+});
