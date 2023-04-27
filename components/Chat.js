@@ -84,7 +84,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
   };
 
   const renderInputToolbar = (props) => {
-    return isConnected ? <InputToolbar {...props} /> : null;
+    isConnected && <InputToolbar {...props} />;
   };
 
   const renderCustomActions = (props) => {
