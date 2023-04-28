@@ -1,249 +1,118 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, ImageBackground, Alert, Pressable } from 'react-native';
-import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
-
-const backgroundImage = require('../assets/background-image.png');
-
-const COLOR_1 = '#090C08';
-const COLOR_2 = '#474056';
-const COLOR_3 = '#8A95A5';
-const COLOR_4 = '#B9C6AE';
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ImageBackground, KeyboardAvoidingView } from "react-native";
+import { getAuth, signInAnonymously } from "firebase/auth";
+import { Alert } from "react-native";
 
 const Start = ({ navigation }) => {
+  const [text, setText] = useState("");
+  const [color, setColor] = useState("");
   const auth = getAuth();
-  const [name, setName] = useState('');
-  const [backgroundColor, setBackgroundColor] = useState(backgroundColor);
 
   const signInUser = () => {
-    if (name.length < 3) {
-      Alert.alert('Please enter a name with at least three characters.');
-      return;
-    }
     signInAnonymously(auth)
       .then((result) => {
-        navigation.navigate('Chat', {
-          uid: result.user.uid,
-          name: name,
-          backgroundColor: backgroundColor,
+        navigation.navigate("Chat", {
+          userID: result.user.uid,
+          name: text ? text : "User",
+          color: color ? color : "white",
         });
-        Alert.alert('Successfully Signed In');
+        Alert.alert("Signed in successfully!");
       })
       .catch((error) => {
-        Alert.alert('Unable to sign in. Try again later.');
+        Alert.alert("Unable to sign in, try again later.");
       });
   };
 
   return (
     <ImageBackground
-      source={backgroundImage}
+      source={require("../assets/background-image.png")}
       resizeMode='cover'
-      style={[styles.container, styles.image]}
+      style={styles.backgroundImage}
     >
-      <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Chat App</Text>
-      </View>
-
-      <View style={styles.formwrapper}>
-        <View style={styles.inputSection}>
+      <View style={styles.container}>
+        <View style={styles.subContainer}>
+          <Text style={styles.title}>Chat App!</Text>
+        </View>
+        <View style={styles.subContainer}>
           <TextInput
-            style={styles.textInput}
-            onChangeText={setName}
-            value={name}
-            placeholder='Enter Name'
-            textContentType='username'
+            placeholder='Your name'
+            style={styles.input}
+            onChangeText={setText}
           />
-        </View>
-        <View>
-          <Text style={styles.subtitle}>Choose Your Background Color</Text>
-          <View style={styles.colorsWrapper}>
-            <Pressable
-              onPress={() => setBackgroundColor(COLOR_1)}
-              style={[
-                styles.btn_colors__inactive,
-                backgroundColor === COLOR_1 ? styles.btn_colors__active : null,
-              ]}
-            >
-              <View style={[styles.btn_colors, styles.btn_colors__1]}></View>
-            </Pressable>
-            <Pressable
-              onPress={() => setBackgroundColor(COLOR_2)}
-              style={[
-                styles.btn_colors__inactive,
-                backgroundColor === COLOR_2 ? styles.btn_colors__active : null,
-              ]}
-            >
-              <View style={[styles.btn_colors, styles.btn_colors__2]}></View>
-            </Pressable>
-            <Pressable
-              onPress={() => setBackgroundColor(COLOR_3)}
-              style={[
-                styles.btn_colors__inactive,
-                backgroundColor === COLOR_3 ? styles.btn_colors__active : null,
-              ]}
-            >
-              <View style={[styles.btn_colors, styles.btn_colors__3]}></View>
-            </Pressable>
-            <Pressable
-              onPress={() => setBackgroundColor(COLOR_4)}
-              style={[
-                styles.btn_colors__inactive,
-                backgroundColor === COLOR_4 ? styles.btn_colors__active : null,
-              ]}
-            >
-              <View style={[styles.btn_colors, styles.btn_colors__4]}></View>
-            </Pressable>
+
+          <Text>Choose Background Color</Text>
+          <View style={styles.radioButtonContainer}>
+            <TouchableOpacity
+              style={[styles.radioButton, { backgroundColor: "#090C08" }]}
+              onPress={() => setColor("#090C08")}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, { backgroundColor: "#474056" }]}
+              onPress={() => setColor("#474056")}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, { backgroundColor: "#8A95A5" }]}
+              onPress={() => setColor("#8A95A5")}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, { backgroundColor: "#B9C6AE" }]}
+              onPress={() => setColor("#B9C6AE")}
+            ></TouchableOpacity>
           </View>
+          <TouchableOpacity style={styles.button} onPress={signInUser}>
+            <Text>Go to Chat</Text>
+          </TouchableOpacity>
         </View>
-        <Pressable onPress={signInUser} style={styles.button}>
-          <Text style={styles.buttonText}>Start Chatting</Text>
-        </Pressable>
       </View>
+      {Platform.OS === "ios" ? (
+        <KeyboardAvoidingView behavior='padding' />
+      ) : null}
     </ImageBackground>
   );
-}
-
+};
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-
-  textInput: {
+  subContainer: {
     flex: 1,
-    fontSize: 16,
-    fontWeight: '300',
-    color: '#757083',
-    opacity: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "88%",
   },
-
-  titleWrapper: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: 'auto',
+  radioButtonContainer: {
+    width: "70%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    margin: 20,
   },
-
   title: {
-    fontSize: 45,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    textAlign: 'center',
+    fontWeight: "bold",
+    fontSize: 30,
   },
-
-  subtitle: {
-    fontSize: 16,
-    fontWeight: '300',
-    color: '#757083',
-    opacity: 100,
-    marginBottom: 10,
-  },
-
-  formWrapper: {
-    backgroundColor: '#fff',
-    width: '88%',
-    justifyContent: 'space-evenly',
-    marginBottom: 30,
-  },
-
-  inputSection: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    height: 60,
-    borderColor: '#757083',
-    borderWidth: 1.5,
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-
-  textInput: {
-    fontSize: 16,
-    fontWeight: '300',
-    color: '#757083',
-    textAlign: 'center',
-  },
-
-  colorsWrapper: {
-    marginBottom: 20,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
-    gap: 20,
-    height: 60,
-  },
-
-  image: {
-    height: '100%',
-  },
-
-  color: {
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    marginRight: 40,
-  },
-
-  colorSelected: {
-    borderStyle: 'solid',
-    borderWidth: 2,
-    borderColor: '#5f5f5f',
-  },
-
-  btn: {
-    height: 50,
-    width: '100%',
-    backgroundColor: '#757083',
-    borderRadius: 50,
-    padding: 15,
-  },
-
-  btnText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFF',
-    textAlign: 'center',
-  },
-
-  btn_colors__inactive: {
-    width: 55,
-    height: 55,
-    borderRadius: 50,
-    borderWidth: 2,
-    borderColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  btn_colors__active: {
-    borderColor: '#757083',
-  },
-
-  btn_colors: {
-    width: 45,
-    height: 45,
+  button: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
     padding: 10,
-    borderRadius: 50,
   },
-
-  btn_colors__1: {
-    backgroundColor: COLOR_1,
+  radioButton: {
+    backgroundColor: "black",
+    width: 30,
+    height: 30,
+    borderRadius: 15,
   },
-
-  btn_colors__2: {
-    backgroundColor: COLOR_2,
-  },
-
-  btn_colors__3: {
-    backgroundColor: COLOR_3,
-  },
-
-  btn_colors__4: {
-    backgroundColor: COLOR_4,
+  input: {
+    height: 40,
+    width: "88%",
+    margin: 12,
+    borderWidth: 3,
+    padding: 10,
   },
 });
 
