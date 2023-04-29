@@ -37,4 +37,11 @@ Dependencies
   "react-native-maps": "1.3.2",
   
 Setting Up the Development Environment
-  -Clone the repository: git clone 
+  -Clone the repository: git clone https://github.com/HZeligman/ChatApp
+
+Setting up Expo  
+  -Install Expo CLI: npm install -g expo-cli
+  -Create an account and log in at https://expo.dev/
+  -Download the Expo Go App onto your smartphone.
+  -Run the app: expo start
+  -You will see choices to run the app in different simulators or on your smartphone.
