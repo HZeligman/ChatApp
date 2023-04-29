@@ -11,9 +11,30 @@ and location data.
 -Data gets stored online and offline.
 
 Techstack
--React Native
--Expo
--Google Firebase
--Google Firestore
--React Native Gifted Chat
+-React Native,
+-Expo,
+-Google Firebase,
+-Google Firestore,
+-React Native Gifted Chat,
 
+Dependencies
+  "@react-native-async-storage/async-storage": "1.17.11",
+  "@react-native-community/netinfo": "9.3.7",
+  "@react-navigation/bottom-tabs": "^6.5.7",
+  "@react-navigation/native": "^6.1.6",
+  "@react-navigation/native-stack": "^6.9.12",
+  "@react-navigation/stack": "^6.3.16",
+  "expo": "~48.0.9",
+  "expo-image-picker": "~14.1.1",
+  "expo-location": "~15.1.1",
+  "expo-media-library": "~15.2.3",
+  "expo-status-bar": "~1.4.4",
+  "firebase": "^9.13.0",
+  "react": "18.2.0",
+  "react-native": "^0.71.4",
+  "react-native-gesture-handler": "~2.9.0",
+  "react-native-gifted-chat": "^2.0.1",
+  "react-native-maps": "1.3.2",
+  
+Setting Up the Development Environment
+  -Clone the repository: git clone 
